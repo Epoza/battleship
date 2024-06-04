@@ -1,25 +1,23 @@
-import './style.css';
-import typescriptLogo from './typescript.svg';
-// eslint-disable-next-line import/no-absolute-path
-import viteLogo from '/vite.svg';
-import { setupCounter } from './counter';
+function analyzeArray(data: number[]) {
+  const average = () => {
+    const sum = data.reduce(
+      (accumulator: number, currentValue: number) => accumulator + currentValue,
+      0
+    );
+    return sum / data.length;
+  };
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`;
+  const min = () => {
+    return Math.min(...data);
+  };
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!);
+  const max = () => {
+    return Math.max(...data);
+  };
+
+  const length = () => {
+    return data.length;
+  };
+  return { average: average(), min: min(), max: max(), length: length() };
+}
+export default analyzeArray;
