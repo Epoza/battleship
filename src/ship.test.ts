@@ -1,4 +1,4 @@
-import createShip from './ship';
+import { createShip } from './ship';
 
 const ship = createShip(4);
 

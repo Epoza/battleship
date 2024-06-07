@@ -1,4 +1,4 @@
-type Ship = {
+export type Ship = {
   length: number;
   timesHit: number;
   isSunk: () => boolean;
@@ -6,7 +6,7 @@ type Ship = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function createShip(length: number): Ship {
+export function createShip(length: number): Ship {
   let timesHit = 0;
 
   const hit = () => {
@@ -19,9 +19,10 @@ function createShip(length: number): Ship {
 
   return {
     length,
-    timesHit,
+    get timesHit() {
+      return timesHit;
+    },
     isSunk,
     hit,
   };
 }
-export default createShip;
