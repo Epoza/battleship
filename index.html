@@ -4,15 +4,16 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="src/style.css">
     <title>Battleship</title>
   </head>
   <body>
     <header>
-      <div class="headerName">Battleship</div>
+      <div id="headerName" class="text-xl">Battleship</div>
     </header>
     <div id="gameboards">
-      <div id="player-board"></div>
-      <div id="computer-board"></div>
+      <div id="player-board" class="board m-5"></div>
+      <div id="computer-board" class="board"></div>
     </div>
     <script type="module" src="/src/dom.ts"></script>
   </body>
