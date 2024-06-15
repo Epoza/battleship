@@ -4,16 +4,6 @@ import createPlayer from './player';
 // Define type for the Player
 type Player = ReturnType<typeof createPlayer>;
 
-const player: Player = createPlayer(false);
-const computer: Player = createPlayer(true);
-
-const playerBoardElement = document.getElementById(
-  'player-board'
-) as HTMLElement;
-const computerBoardElement = document.getElementById(
-  'computer-board'
-) as HTMLElement;
-
 // Function to create the board in the DOM
 function createBoard(boardElement: HTMLElement): void {
   for (let y = 0; y < 10; y++) {
@@ -27,22 +17,21 @@ function createBoard(boardElement: HTMLElement): void {
   }
 }
 
-// Create boards
-createBoard(playerBoardElement);
-createBoard(computerBoardElement);
+// Automatically place the ships for now
+function placeShips(playerType: Player) {
+  // Eventually loop through all ships and allow user to place them
+  const playerTypeShip1 = playerType.gameboard.ships[0];
+  const playerTypeShip2 = playerType.gameboard.ships[1];
+  const playerTypeShip3 = playerType.gameboard.ships[2];
+  const playerTypeShip4 = playerType.gameboard.ships[3];
 
-// Eventually loop through all ships and allow user to place them
-const playerShip1 = player.gameboard.ships[0];
-const playerShip2 = player.gameboard.ships[1];
-const playerShip3 = player.gameboard.ships[2];
-const playerShip4 = player.gameboard.ships[3];
-
-// check if ship can actually be placed on baord
-// add the ships to the player board
-player.gameboard.placeShip(playerShip1, 0, 0, 'horizontal');
-player.gameboard.placeShip(playerShip2, 0, 2, 'vertical');
-player.gameboard.placeShip(playerShip3, 7, 5, 'vertical');
-player.gameboard.placeShip(playerShip4, 3, 3, 'horizontal');
+  // check if ship can actually be placed on baord
+  // add the ships to the user board
+  playerType.gameboard.placeShip(playerTypeShip1, 0, 0, 'horizontal');
+  playerType.gameboard.placeShip(playerTypeShip2, 0, 2, 'vertical');
+  playerType.gameboard.placeShip(playerTypeShip3, 7, 5, 'vertical');
+  playerType.gameboard.placeShip(playerTypeShip4, 3, 3, 'horizontal');
+}
 
 // Function to update the board based on the game state
 function updateBoard(playerType: Player, boardElement: HTMLElement) {
@@ -70,37 +59,4 @@ function updateBoard(playerType: Player, boardElement: HTMLElement) {
   }
 }
 
-// Initial update to show ships on player's board
-updateBoard(player, playerBoardElement);
-
-// put computer ships on board
-const computerShip1 = computer.gameboard.ships[0];
-const computerShip2 = computer.gameboard.ships[1];
-const computerShip3 = computer.gameboard.ships[2];
-const computerShip4 = computer.gameboard.ships[3];
-
-// check if ship can actually be placed on baord
-// add the ships to the computer board
-computer.gameboard.placeShip(computerShip1, 0, 0, 'horizontal');
-computer.gameboard.placeShip(computerShip2, 0, 2, 'vertical');
-computer.gameboard.placeShip(computerShip3, 7, 5, 'vertical');
-computer.gameboard.placeShip(computerShip4, 3, 3, 'horizontal');
-
-updateBoard(computer, computerBoardElement);
-
-computerBoardElement.addEventListener('click', (e) => {
-  const target = e.target as HTMLElement;
-  const { x } = target.dataset;
-  const { y } = target.dataset;
-
-  if (x !== undefined && y !== undefined) {
-    const hit = computer.gameboard.receiveAttack(Number(x), Number(y));
-    updateBoard(computer, computerBoardElement);
-
-    if (hit) {
-      target.classList.add('hit');
-    } else {
-      target.classList.add('miss');
-    }
-  }
-});
+export { createBoard, updateBoard, placeShips };
