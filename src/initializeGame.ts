@@ -39,29 +39,19 @@ function initializeGame() {
 
   // AI random attack logic
   function aiRandomAttack() {
-    let x;
-    let y;
-    let result;
-    do {
-      x = Math.floor(Math.random() * 10);
-      y = Math.floor(Math.random() * 10);
-      const hit = computer.gameboard.receiveAttack(Number(x), Number(y));
-      updateBoard(computer, computerBoardElement);
-
-      if (hit) {
-        userBoardElement
-          .querySelector(`[data-x="${x}"][data-y="${y}"]`)!
-          .classList.add('hit');
-      } else {
-        userBoardElement
-          .querySelector(`[data-x="${x}"][data-y="${y}"]`)!
-          .classList.add('hit');
-      }
-      result = user.gameboard.receiveAttack(x, y);
-      updateBoard(user, userBoardElement); // Update user board after each attack
-    } while (!result);
-    // eslint-disable-next-line no-useless-return
-    if (checkGameOver()) return; // Check for game over after each attack
+    const x = Math.floor(Math.random() * 10);
+    const y = Math.floor(Math.random() * 10);
+    const isHit = user.gameboard.receiveAttack(x, y);
+    if (isHit) {
+      userBoardElement
+        .querySelector(`[data-x="${x}"][data-y="${y}"]`)!
+        .classList.add('hit');
+    } else {
+      userBoardElement
+        .querySelector(`[data-x="${x}"][data-y="${y}"]`)!
+        .classList.add('miss');
+    }
+    updateBoard(user, userBoardElement); // Update user board after each attack
   }
   // Add event listener to the computer board for user attacks
   computerBoardElement.addEventListener('click', (e) => {
