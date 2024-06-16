@@ -39,19 +39,19 @@ function initializeGame() {
 
   // AI random attack logic
   function aiRandomAttack() {
-    const x = Math.floor(Math.random() * 10);
-    const y = Math.floor(Math.random() * 10);
-    const isHit = user.gameboard.receiveAttack(x, y);
-    if (isHit) {
-      userBoardElement
-        .querySelector(`[data-x="${x}"][data-y="${y}"]`)!
-        .classList.add('hit');
-    } else {
-      userBoardElement
-        .querySelector(`[data-x="${x}"][data-y="${y}"]`)!
-        .classList.add('miss');
-    }
-    updateBoard(user, userBoardElement); // Update user board after each attack
+    let x;
+    let y;
+    let isHit;
+
+    // Keep generating random coordinates until a valid attack is made
+    do {
+      x = Math.floor(Math.random() * 10);
+      y = Math.floor(Math.random() * 10);
+      isHit = user.gameboard.receiveAttack(x, y);
+    } while (!isHit);
+
+    // Update the user board UI based on the attack result
+    updateBoard(user, userBoardElement);
   }
   // Add event listener to the computer board for user attacks
   computerBoardElement.addEventListener('click', (e) => {
@@ -59,14 +59,8 @@ function initializeGame() {
     const { x, y } = target.dataset;
 
     if (x !== undefined && y !== undefined) {
-      const hit = computer.gameboard.receiveAttack(Number(x), Number(y));
+      computer.gameboard.receiveAttack(Number(x), Number(y));
       updateBoard(computer, computerBoardElement);
-
-      if (hit) {
-        target.classList.add('hit');
-      } else {
-        target.classList.add('miss');
-      }
 
       if (checkGameOver()) return;
 
