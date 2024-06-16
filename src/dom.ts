@@ -41,7 +41,11 @@ function updateBoard(playerType: Player, boardElement: HTMLElement) {
       const cell = boardElement.querySelector(`[data-x="${x}"][data-y="${y}"]`);
       const cellValue = playerType.gameboard.board[y][x];
 
-      if (
+      if (cellValue === true) {
+        cell!.classList.add('hit');
+      } else if (cellValue === false) {
+        cell!.classList.add('miss');
+      } else if (
         cellValue &&
         typeof cellValue === 'object' &&
         'length' in cellValue &&
@@ -50,10 +54,6 @@ function updateBoard(playerType: Player, boardElement: HTMLElement) {
         if (!playerType.isComputer) {
           cell!.classList.add('ship');
         }
-      } else if (cellValue === false) {
-        cell!.classList.add('miss');
-      } else if (cellValue === true) {
-        cell!.classList.add('hit');
       }
     }
   }
