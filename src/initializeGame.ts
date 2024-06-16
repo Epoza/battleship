@@ -1,6 +1,5 @@
 import createPlayer from './player';
 import { createBoard, updateBoard, placeShips } from './dom';
-import { switchTurns, handleAttack, GameState } from './gameLogic';
 
 // Define type for the Player
 type Player = ReturnType<typeof createPlayer>;
@@ -25,18 +24,52 @@ function initializeGame() {
   updateBoard(user, userBoardElement);
   updateBoard(computer, computerBoardElement);
 
-  const gameState: GameState = {
-    currentPlayer: user,
-    opponent: computer,
-  };
+  // Check for game over condition
+  function checkGameOver() {
+    if (user.gameboard.allShipsSunk()) {
+      alert('Computer wins!');
+      return true;
+    }
+    if (computer.gameboard.allShipsSunk()) {
+      alert('User wins!');
+      return true;
+    }
+    return false;
+  }
 
-  // Add event listener to the computer board for attacks
+  // AI random attack logic
+  function aiRandomAttack() {
+    let x;
+    let y;
+    let result;
+    do {
+      x = Math.floor(Math.random() * 10);
+      y = Math.floor(Math.random() * 10);
+      const hit = computer.gameboard.receiveAttack(Number(x), Number(y));
+      updateBoard(computer, computerBoardElement);
+
+      if (hit) {
+        userBoardElement
+          .querySelector(`[data-x="${x}"][data-y="${y}"]`)!
+          .classList.add('hit');
+      } else {
+        userBoardElement
+          .querySelector(`[data-x="${x}"][data-y="${y}"]`)!
+          .classList.add('hit');
+      }
+      result = user.gameboard.receiveAttack(x, y);
+      updateBoard(user, userBoardElement); // Update user board after each attack
+    } while (!result);
+    // eslint-disable-next-line no-useless-return
+    if (checkGameOver()) return; // Check for game over after each attack
+  }
+  // Add event listener to the computer board for user attacks
   computerBoardElement.addEventListener('click', (e) => {
     const target = e.target as HTMLElement;
     const { x, y } = target.dataset;
 
     if (x !== undefined && y !== undefined) {
-      const hit = handleAttack(gameState, Number(x), Number(y));
+      const hit = computer.gameboard.receiveAttack(Number(x), Number(y));
       updateBoard(computer, computerBoardElement);
 
       if (hit) {
@@ -45,16 +78,14 @@ function initializeGame() {
         target.classList.add('miss');
       }
 
-      switchTurns(gameState);
-      // Implement AI attack logic here for computer's turn if necessary
-      if (gameState.currentPlayer.isComputer) {
-        // Add AI attack logic here
-        const aiX = Math.floor(Math.random() * 10);
-        const aiY = Math.floor(Math.random() * 10);
-        handleAttack(gameState, aiX, aiY);
-        updateBoard(user, userBoardElement);
-        switchTurns(gameState);
-      }
+      if (checkGameOver()) return;
+
+      // Implement AI attack logic for computer's turn
+      setTimeout(() => {
+        aiRandomAttack();
+        // eslint-disable-next-line no-useless-return
+        if (checkGameOver()) return;
+      }, 500); // Adding a slight delay for AI's move
     }
   });
 }
