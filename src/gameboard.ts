@@ -4,7 +4,7 @@ import { Ship, createShip } from './ship';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function gameboard() {
   const ships: Ship[] = [];
-  const board: (Ship | null)[][] = Array.from({ length: 10 }, () =>
+  const board: (Ship | boolean | null)[][] = Array.from({ length: 10 }, () =>
     Array(10).fill(null)
   );
   const missedAttacks: [number, number][] = []; // Keep track of missed attacks
@@ -65,12 +65,18 @@ function gameboard() {
       throw new Error('Invalid position');
     }
     const target = board[y][x];
+    if (typeof target === 'boolean') {
+      return false; // Ship has already been attacked
+    }
+
     if (target) {
-      target.hit();
+      target.hit(); // Call the hit method on the Ship object
+      board[y][x] = true; // Mark the cell as hit (true)
       return true; // Hit
     }
     missedAttacks.push([x, y]);
-    return false; // Miss
+    board[y][x] = false; // Mark the cell as missed (false)
+    return true; // Valid attack but Miss
   };
 
   // Check if all ships are sunk
