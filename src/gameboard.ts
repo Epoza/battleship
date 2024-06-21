@@ -66,7 +66,7 @@ function gameboard() {
     }
     const target = board[y][x];
     if (typeof target === 'boolean') {
-      return false; // Ship has already been attacked
+      return false; // Cell has already been attacked
     }
 
     if (target) {
