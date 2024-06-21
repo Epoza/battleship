@@ -53,13 +53,14 @@ function initializeGame() {
     // Update the user board UI based on the attack result
     updateBoard(user, userBoardElement);
   }
+
   // Add event listener to the computer board for user attacks
   computerBoardElement.addEventListener('click', (e) => {
     const target = e.target as HTMLElement;
     const { x, y } = target.dataset;
+    const isHit = computer.gameboard.receiveAttack(Number(x), Number(y));
 
-    if (x !== undefined && y !== undefined) {
-      computer.gameboard.receiveAttack(Number(x), Number(y));
+    if (x !== undefined && y !== undefined && isHit) {
       updateBoard(computer, computerBoardElement);
 
       if (checkGameOver()) return;
@@ -70,6 +71,8 @@ function initializeGame() {
         // eslint-disable-next-line no-useless-return
         if (checkGameOver()) return;
       }, 500); // Adding a slight delay for AI's move
+    } else {
+      // cell already attacked
     }
   });
 }
