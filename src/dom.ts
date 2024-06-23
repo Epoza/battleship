@@ -17,20 +17,25 @@ function createBoard(boardElement: HTMLElement): void {
   }
 }
 
-// Automatically place the ships for now
-function placeShips(playerType: Player) {
-  // Eventually loop through all ships and allow user to place them
-  const playerTypeShip1 = playerType.gameboard.ships[0];
-  const playerTypeShip2 = playerType.gameboard.ships[1];
-  const playerTypeShip3 = playerType.gameboard.ships[2];
-  const playerTypeShip4 = playerType.gameboard.ships[3];
+function getRandomInt(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
-  // check if ship can actually be placed on baord
-  // add the ships to the user board
-  playerType.gameboard.placeShip(playerTypeShip1, 0, 0, 'horizontal');
-  playerType.gameboard.placeShip(playerTypeShip2, 0, 2, 'vertical');
-  playerType.gameboard.placeShip(playerTypeShip3, 7, 5, 'vertical');
-  playerType.gameboard.placeShip(playerTypeShip4, 3, 3, 'horizontal');
+function getRandomOrientation(): 'horizontal' | 'vertical' {
+  return Math.random() < 0.5 ? 'horizontal' : 'vertical';
+}
+
+// Function that randomly places ships onto gameboard
+function placeShips(playerType: Player) {
+  playerType.gameboard.ships.forEach((ship) => {
+    let placed = false;
+    while (!placed) {
+      const x = getRandomInt(0, 9);
+      const y = getRandomInt(0, 9);
+      const orientation = getRandomOrientation();
+      placed = playerType.gameboard.placeShip(ship, x, y, orientation);
+    }
+  });
 }
 
 // Function to update the board based on the game state
