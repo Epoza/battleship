@@ -17,27 +17,6 @@ function createBoard(boardElement: HTMLElement): void {
   }
 }
 
-function getRandomInt(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function getRandomOrientation(): 'horizontal' | 'vertical' {
-  return Math.random() < 0.5 ? 'horizontal' : 'vertical';
-}
-
-// Function that randomly places ships onto gameboard
-function placeShips(playerType: Player) {
-  playerType.gameboard.ships.forEach((ship) => {
-    let placed = false;
-    while (!placed) {
-      const x = getRandomInt(0, 9);
-      const y = getRandomInt(0, 9);
-      const orientation = getRandomOrientation();
-      placed = playerType.gameboard.placeShip(ship, x, y, orientation);
-    }
-  });
-}
-
 // Function to update the board based on the game state
 function updateBoard(playerType: Player, boardElement: HTMLElement) {
   // Loop through the gameboard and update the DOM elements
@@ -64,4 +43,4 @@ function updateBoard(playerType: Player, boardElement: HTMLElement) {
   }
 }
 
-export { createBoard, updateBoard, placeShips };
+export { createBoard, updateBoard };

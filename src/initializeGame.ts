@@ -1,8 +1,11 @@
 import createPlayer from './player';
-import { createBoard, updateBoard, placeShips } from './dom';
+import { createBoard, updateBoard } from './dom';
 
 // Define type for the Player
 type Player = ReturnType<typeof createPlayer>;
+
+// Initialize the game state
+let gameStarted = false;
 
 function initializeGame() {
   const user: Player = createPlayer(false);
@@ -12,17 +15,39 @@ function initializeGame() {
   const computerBoardElement = document.getElementById(
     'computer-board'
   ) as HTMLElement;
+  const startBtn = document.getElementById('start-btn') as HTMLButtonElement;
 
   createBoard(userBoardElement);
   createBoard(computerBoardElement);
 
-  // Place ships for user and computer
-  placeShips(user);
-  placeShips(computer);
-
   // Initial update to show ships on user's board
   updateBoard(user, userBoardElement);
   updateBoard(computer, computerBoardElement);
+
+  function getRandomInt(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function getRandomOrientation(): 'horizontal' | 'vertical' {
+    return Math.random() < 0.5 ? 'horizontal' : 'vertical';
+  }
+
+  // Function that randomly places ships onto gameboard
+  function placeShips(playerType: Player) {
+    playerType.gameboard.ships.forEach((ship) => {
+      let placed = false;
+      while (!placed) {
+        const x = getRandomInt(0, 9);
+        const y = getRandomInt(0, 9);
+        const orientation = getRandomOrientation();
+        placed = playerType.gameboard.placeShip(ship, x, y, orientation);
+      }
+    });
+  }
+
+  // Place ships for user and computer
+  placeShips(user);
+  placeShips(computer);
 
   // Check for game over condition
   function checkGameOver() {
@@ -54,25 +79,33 @@ function initializeGame() {
     updateBoard(user, userBoardElement);
   }
 
-  // Add event listener to the computer board for user attacks
-  computerBoardElement.addEventListener('click', (e) => {
-    const target = e.target as HTMLElement;
-    const { x, y } = target.dataset;
-    const isHit = computer.gameboard.receiveAttack(Number(x), Number(y));
+  user.gameboard.placeShip(user.gameboard.ships[0], 0, 0, 'horizontal');
+  updateBoard(user, userBoardElement);
+  // Event handler for the start button
+  startBtn.addEventListener('click', () => {
+    if (!gameStarted) {
+      gameStarted = true;
+      // Add event listener to the computer board for user attacks
+      computerBoardElement.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const { x, y } = target.dataset;
+        const isHit = computer.gameboard.receiveAttack(Number(x), Number(y));
 
-    if (x !== undefined && y !== undefined && isHit) {
-      updateBoard(computer, computerBoardElement);
+        if (x !== undefined && y !== undefined && isHit) {
+          updateBoard(computer, computerBoardElement);
 
-      if (checkGameOver()) return;
+          if (checkGameOver()) return;
 
-      // Implement AI attack logic for computer's turn
-      setTimeout(() => {
-        aiRandomAttack();
-        // eslint-disable-next-line no-useless-return
-        if (checkGameOver()) return;
-      }, 500); // Adding a slight delay for AI's move
-    } else {
-      // cell already attacked
+          // Implement AI attack logic for computer's turn
+          setTimeout(() => {
+            aiRandomAttack();
+            // eslint-disable-next-line no-useless-return
+            if (checkGameOver()) return;
+          }, 500); // Adding a slight delay for AI's move
+        } else {
+          // cell already attacked
+        }
+      });
     }
   });
 }
