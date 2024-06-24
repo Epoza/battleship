@@ -84,10 +84,19 @@ function gameboard() {
     return ships.every((ship) => ship.isSunk());
   };
 
+  function clearBoard() {
+    for (let y = 0; y < 10; y++) {
+      for (let x = 0; x < 10; x++) {
+        board[y][x] = null;
+      }
+    }
+  }
+
   return {
     placeShip,
     receiveAttack,
     allShipsSunk,
+    clearBoard,
     missedAttacks,
     ships,
     board,

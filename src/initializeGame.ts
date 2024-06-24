@@ -16,13 +16,12 @@ function initializeGame() {
     'computer-board'
   ) as HTMLElement;
   const startBtn = document.getElementById('start-btn') as HTMLButtonElement;
+  const randomizeBtn = document.getElementById(
+    'randomize-btn'
+  ) as HTMLButtonElement;
 
   createBoard(userBoardElement);
   createBoard(computerBoardElement);
-
-  // Initial update to show ships on user's board
-  updateBoard(user, userBoardElement);
-  updateBoard(computer, computerBoardElement);
 
   function getRandomInt(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -79,8 +78,25 @@ function initializeGame() {
     updateBoard(user, userBoardElement);
   }
 
-  user.gameboard.placeShip(user.gameboard.ships[0], 0, 0, 'horizontal');
-  updateBoard(user, userBoardElement);
+  // Add event listener for the randomize ships button
+  randomizeBtn.addEventListener('click', () => {
+    // Randomize the board if game has not been started
+    if (!gameStarted) {
+      user.gameboard.clearBoard(); // Clear the current board
+      placeShips(user); // Place ships randomly
+      updateBoard(user, userBoardElement); // Update the board UI
+    } else {
+      // Confirm with the user if they want to restart the game
+      const confirmRestart = confirm(
+        'The game has already been started. Would you like to restart?'
+      );
+      if (confirmRestart) {
+        // Reload the window to reset the game
+        window.location.reload();
+      }
+    }
+  });
+
   // Event handler for the start button
   startBtn.addEventListener('click', () => {
     if (!gameStarted) {
@@ -101,13 +117,15 @@ function initializeGame() {
             aiRandomAttack();
             // eslint-disable-next-line no-useless-return
             if (checkGameOver()) return;
-          }, 500); // Adding a slight delay for AI's move
-        } else {
-          // cell already attacked
+          }, 500); // Add a slight delay for AI's move
         }
       });
     }
   });
+
+  // Initial update to show ships on user's board
+  updateBoard(user, userBoardElement);
+  updateBoard(computer, computerBoardElement);
 }
 
 export default initializeGame;

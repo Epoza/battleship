@@ -17,7 +17,7 @@ function createBoard(boardElement: HTMLElement): void {
   }
 }
 
-// Function to update the board based on the game state
+// Update the updateBoard function to properly update the UI
 function updateBoard(playerType: Player, boardElement: HTMLElement) {
   // Loop through the gameboard and update the DOM elements
   for (let y = 0; y < 10; y++) {
@@ -25,6 +25,10 @@ function updateBoard(playerType: Player, boardElement: HTMLElement) {
       const cell = boardElement.querySelector(`[data-x="${x}"][data-y="${y}"]`);
       const cellValue = playerType.gameboard.board[y][x];
 
+      // Reset cell classes
+      cell!.classList.remove('hit', 'miss', 'ship');
+
+      // Update cell classes based on gameboard state
       if (cellValue === true) {
         cell!.classList.add('hit');
       } else if (cellValue === false) {
