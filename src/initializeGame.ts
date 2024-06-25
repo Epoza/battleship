@@ -20,6 +20,18 @@ function initializeGame() {
     'randomize-btn'
   ) as HTMLButtonElement;
 
+  const gameOverModal = document.getElementById('gameOverModal') as HTMLElement;
+  const gameOverMessage = document.getElementById(
+    'gameOverMessage'
+  ) as HTMLElement;
+  const closeModalBtn = document.getElementById(
+    'closeModalBtn'
+  ) as HTMLButtonElement;
+
+  const restartModal = document.getElementById('restartModal') as HTMLElement;
+  const yesBtn = document.getElementById('yesBtn') as HTMLElement;
+  const noBtn = document.getElementById('noBtn') as HTMLElement;
+
   createBoard(userBoardElement);
   createBoard(computerBoardElement);
 
@@ -51,11 +63,15 @@ function initializeGame() {
   // Check for game over condition
   function checkGameOver() {
     if (user.gameboard.allShipsSunk()) {
-      alert('Computer wins!');
+      gameOverMessage.textContent = 'Computer wins!';
+      gameOverModal.classList.remove('hidden');
+      gameOverModal.classList.add('flex');
       return true;
     }
     if (computer.gameboard.allShipsSunk()) {
-      alert('User wins!');
+      gameOverMessage.textContent = 'User wins!';
+      gameOverModal.classList.remove('hidden');
+      gameOverModal.classList.add('flex');
       return true;
     }
     return false;
@@ -86,14 +102,8 @@ function initializeGame() {
       placeShips(user); // Place ships randomly
       updateBoard(user, userBoardElement); // Update the board UI
     } else {
-      // Confirm with the user if they want to restart the game
-      const confirmRestart = confirm(
-        'The game has already been started. Would you like to restart?'
-      );
-      if (confirmRestart) {
-        // Reload the window to reset the game
-        window.location.reload();
-      }
+      restartModal.classList.toggle('flex');
+      restartModal.classList.toggle('hidden');
     }
   });
 
@@ -101,6 +111,7 @@ function initializeGame() {
   startBtn.addEventListener('click', () => {
     if (!gameStarted) {
       gameStarted = true;
+      randomizeBtn.textContent = 'Restart';
       // Add event listener to the computer board for user attacks
       computerBoardElement.addEventListener('click', (e) => {
         const target = e.target as HTMLElement;
@@ -123,6 +134,22 @@ function initializeGame() {
     }
   });
 
+  // Close the game over modal and restart the game
+  closeModalBtn.addEventListener('click', () => {
+    gameOverModal.classList.remove('flex');
+    gameOverModal.classList.add('hidden');
+  });
+
+  // Restart the game
+  yesBtn.addEventListener('click', () => {
+    window.location.reload();
+  });
+
+  // Continue the game
+  noBtn.addEventListener('click', () => {
+    restartModal.classList.remove('flex');
+    restartModal.classList.add('hidden');
+  });
   // Initial update to show ships on user's board
   updateBoard(user, userBoardElement);
   updateBoard(computer, computerBoardElement);

@@ -9,13 +9,32 @@
   </head>
   <body>
     <header>
-      <div id="headerName" class="text-xl">Battleship</div>
+      <div id="headerName" class="mt-5 text-4xl text-black">Battleship</div>
     </header>
     <div class="md:flex" id="gameboards">
       <div id="user-board" class="board p-5"></div>
       <div id="computer-board" class="board p-5"></div>
     </div>
-    <button id="start-btn">Start Game</button>
+    <div id="buttonContainer">
+      <button class="m-5 border-black border-2 rounded-md p-4 bg-gray-400 text-black" id="start-btn">Start Game</button>
+      <button class=" border-black border-2 rounded-md p-4 bg-gray-400 text-black" id="randomize-btn">Randomize Ships</button>
+    </div>
+
+    <div class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 items-center justify-center border-black border-2 rounded-md" id="gameOverModal">
+      <div class="bg-white p-5 rounded-lg text-center">
+        <h2 class="text-2xl font-bold text-black" id="gameOverMessage"></h2>
+        <button class="mt-5 border-black border-2 rounded-md p-2 bg-gray-400" id="closeModalBtn">Close</button>
+      </div>
+    </div>
+
+    <div class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 items-center justify-center border-black border-2 rounded-md" id="restartModal">
+      <div class="bg-white p-5 rounded-lg text-center">
+        <h2 class="text-2xl font-bold text-black" id="restartMessage">Are you sure you want to restart?</h2>
+        <button class="mt-5 border-black border-2 rounded-md p-2 bg-green-600" id="yesBtn">Yes</button>
+        <button class="mt-5 border-black border-2 rounded-md p-2 bg-red-600" id="noBtn">No</button>
+      </div>
+    </div>
+    
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
