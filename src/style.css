@@ -17,6 +17,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  justify-content: center; 
+}
+
 /* Default styles for small screens */
 .board {
   display: grid;
@@ -47,13 +54,13 @@
 /* Styles for large screens (min-width: 768px) */
 @media (min-width: 768px) {
   .board {
-    grid-template-columns: repeat(10, 40px);
-    grid-template-rows: repeat(10, 40px);
+    grid-template-columns: repeat(10, 38px);
+    grid-template-rows: repeat(10, 38px);
   }
 
   .cell {
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
   }
 }
 
@@ -70,6 +77,15 @@
   }
 }
 
+#buttonContainer {
+  display: flex;
+  justify-content: center; 
+  align-items: center;   
+  flex-direction: column;
+}
+
+
+
 .ship {
   background-color: rgb(89, 155, 209);
 }
@@ -80,4 +96,19 @@
 
 .miss {
   background-color: rgb(120, 120, 120);
+}
+
+/* Moving ship & changing orientation */
+
+
+.ship.dragging {
+  opacity: 0.5;
+}
+
+.valid {
+  outline: 2px solid green;
+}
+
+.invalid {
+  outline: 2px solid red;
 }
