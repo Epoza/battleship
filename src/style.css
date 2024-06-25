@@ -97,18 +97,3 @@ body {
 .miss {
   background-color: rgb(120, 120, 120);
 }
-
-/* Moving ship & changing orientation */
-
-
-.ship.dragging {
-  opacity: 0.5;
-}
-
-.valid {
-  outline: 2px solid green;
-}
-
-.invalid {
-  outline: 2px solid red;
-}
